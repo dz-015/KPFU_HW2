@@ -1,4 +1,4 @@
-from os import getcwd, path, remove, listdir
+from os import getcwd, path, remove, listdir, stat
 
 
 class Terminal:
@@ -18,13 +18,17 @@ class Terminal:
             
             
 
-    def cd(self, where):
+    def cd(self, dirname):
         try:
-            new_path = path.join(self.current_path, where)
+            if path.isabs(dirname):
+                new_path = dirname
+            else:
+                new_path = path.join(self.current_path, dirname)
+                
             if (not path.exists(new_path)):
-                raise FileNotFoundError(f"cd: no such file or a directory: {where}")
+                raise FileNotFoundError(f"cd: no such file or a directory: {dirname}")
             
-            self.current_path = path.join(self.current_path, where)
+            self.current_path = new_path
         except FileNotFoundError as err:
             print(err)
     
